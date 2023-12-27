@@ -1,23 +1,28 @@
 import React from 'react';
 
-import {Pressable, StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+const searchIcon = require('../assets/images/search.png');
 
 const Header = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.themeName}>Theme name</Text>
-      </View>
       <Pressable
-        style={styles.hintCountContainer}
         onLongPress={() => {
-          ToastAndroid.show('TODO 힌트카운트 초기화', ToastAndroid.SHORT);
+          navigation.navigate('Settings');
         }}>
-        <View style={{alignItems: 'center'}}>
-          <Text style={styles.hintCountText}>Hint Count</Text>
-          <Text style={styles.hintCountNumber}>0</Text>
-        </View>
+        <Text style={styles.themeName}>기억의 틈</Text>
       </Pressable>
+      <Text style={styles.time}>50:00</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text style={styles.hintCountNumber}>0</Text>
+        <Image
+          source={searchIcon}
+          style={{marginLeft: 10, width: 24, height: 24}}
+        />
+      </View>
     </View>
   );
 };
@@ -26,25 +31,22 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    height: 60,
     backgroundColor: '#212429',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
   },
   themeName: {
-    fontSize: 20,
+    fontSize: 24,
     color: 'white',
     fontWeight: '600',
   },
-  hintCountContainer: {
-    position: 'absolute',
-    right: 0,
-    paddingHorizontal: 8,
-  },
-  hintCountText: {
+  time: {
+    fontSize: 32,
     color: 'white',
+    fontWeight: '600',
   },
   hintCountNumber: {
     color: 'white',

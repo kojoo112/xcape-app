@@ -10,9 +10,8 @@ const Tag = () => {
       onPress={() => {
         ToastAndroid.show('TODO NFC Tag', ToastAndroid.SHORT);
       }}>
-      <Text style={styles.tagText}>TAG</Text>
       <Image source={taggingLogo} style={styles.tagLogo} />
-      <Text style={styles.tagText}>GING</Text>
+      <Text style={styles.tagText}>TAG</Text>
     </Pressable>
   );
 };
@@ -21,9 +20,9 @@ export default Tag;
 
 const styles = StyleSheet.create({
   tag: {
-    flex: 0.5,
     backgroundColor: '#212429',
     paddingHorizontal: 20,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
