@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './screens/Home';
 import Header from './components/Header';
 import Settings from './screens/Settings';
+import TagView from './screens/TagView';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,15 +15,16 @@ function App(): JSX.Element {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            header: ({route}) => {
-              if (route.name !== 'Settings') {
-                return <Header />;
-              }
-            },
+            header: () => <Header />,
           }}
           initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="TagView" component={TagView} />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Settings"
+            component={Settings}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

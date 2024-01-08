@@ -1,14 +1,50 @@
 import React from 'react';
 
-import {Pressable, StyleSheet, ToastAndroid, Text, Image} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, ToastAndroid} from 'react-native';
 import taggingLogo from '../assets/images/taging-logo.png';
+import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+import {modalState, tagListState} from '../atoms';
+import {useNavigation} from '@react-navigation/native';
 
 const Tag = () => {
+  const navigation = useNavigation();
+  const tagList = useRecoilValue(tagListState);
+  const setModalVisible = useSetRecoilState(modalState);
+
+  async function readNdef() {
+    try {
+      setModalVisible(true);
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+
+      return await NfcManager.getTag();
+    } catch (ex) {
+      ToastAndroid.show('다시 시도해주세요.', ToastAndroid.SHORT);
+    } finally {
+      await NfcManager.cancelTechnologyRequest();
+      setModalVisible(false);
+    }
+  }
+
   return (
     <Pressable
       style={styles.tag}
       onPress={() => {
-        ToastAndroid.show('TODO NFC Tag', ToastAndroid.SHORT);
+        readNdef().then(tag => {
+          if (tag) {
+            const payload = Ndef.text.decodePayload(tag.ndefMessage[0].payload);
+            const find = tagList.find(asdf => asdf.tagId === payload);
+            if (find) {
+              navigation.navigate('TagView', {viewList: find.viewList});
+            }
+          }
+        });
+        //   const find = tagList.find(
+        //     tag => tag.tagId === '6c839d4a-1240-493b-a779-3c2b57ef8e21',
+        //   );
+        //   navigation.navigate('TagView', {
+        //     viewList: find.viewList,
+        //   });
       }}>
       <Image source={taggingLogo} style={styles.tagLogo} />
       <Text style={styles.tagText}>TAG</Text>

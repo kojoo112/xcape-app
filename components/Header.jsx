@@ -10,6 +10,7 @@ const Header = () => {
   return (
     <View style={styles.container}>
       <Pressable
+        hitSlop={30}
         onLongPress={() => {
           navigation.navigate('Settings');
         }}>
