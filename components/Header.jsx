@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Timer from './Timer';
 const searchIcon = require('../assets/images/search.png');
 
 const Header = () => {
@@ -16,7 +17,8 @@ const Header = () => {
         }}>
         <Text style={styles.themeName}>기억의 틈</Text>
       </Pressable>
-      <Text style={styles.time}>50:00</Text>
+      {/*<Text style={styles.time}>50:00</Text>*/}
+      <Timer />
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Text style={styles.hintCountNumber}>0</Text>
         <Image

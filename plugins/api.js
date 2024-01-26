@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {setItem} from '../storage/storage';
+import {setItem} from './storage';
 import {getValue} from './firebase';
 
 export const syncInitialData = async (
@@ -26,14 +26,14 @@ export const syncInitialData = async (
       return setItem('themeList', JSON.stringify(res.data));
     })
     .then(() => {
-      return getValue('newHintList');
+      return getValue('/newHintList');
     })
     .then(hintList => {
       setHintList(hintList);
       return setItem('hintList', JSON.stringify(hintList));
     })
     .then(() => {
-      return getValue('newTagList');
+      return getValue('/newTagList');
     })
     .then(tagList => {
       setTagList(tagList);

@@ -14,7 +14,7 @@ const Tag = () => {
 
   async function readNdef() {
     try {
-      setModalVisible(true);
+      setModalVisible({type: 'TAG', visible: true});
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
       return await NfcManager.getTag();
@@ -22,7 +22,7 @@ const Tag = () => {
       ToastAndroid.show('다시 시도해주세요.', ToastAndroid.SHORT);
     } finally {
       await NfcManager.cancelTechnologyRequest();
-      setModalVisible(false);
+      setModalVisible({type: 'TAG', visible: false});
     }
   }
 

@@ -1,8 +1,11 @@
 import {atom} from 'recoil';
 
 export const modalState = atom({
-  key: 'modalVisible',
-  default: false,
+  key: 'modal',
+  default: {
+    type: '',
+    visible: false,
+  },
 });
 
 export const hintListState = atom({
@@ -32,5 +35,8 @@ export const currentThemeState = atom({
     merchantId: 0,
     nameKo: '',
     runningTime: 0,
+    endTime: 0,
+    isPlaying: false,
+    startTime: 0,
   },
 });
