@@ -6,12 +6,13 @@ import {
   currentThemeState,
   hintListState,
   merchantListState,
+  modalState,
   tagListState,
   themeListState,
 } from '../atoms';
-import TagModal from './TagModal';
-import {syncInitialData} from '../api/api';
-import {hasInitialData, getItem} from '../storage/storage';
+import CustomModal from './CustomModal';
+import {syncInitialData} from '../plugins/api';
+import {hasInitialData, getItem} from '../plugins/storage';
 
 export default function Home() {
   const currentTheme = useRecoilValue(currentThemeState);
@@ -21,6 +22,7 @@ export default function Home() {
   const setHintList = useSetRecoilState(hintListState);
   const setTagList = useSetRecoilState(tagListState);
 
+  const setModal = useSetRecoilState(modalState);
   useEffect(() => {
     hasInitialData().then(flag => {
       if (!flag) {
@@ -33,12 +35,11 @@ export default function Home() {
         getItem('currentTheme').then(res => setCurrentTheme(JSON.parse(res)));
       }
     });
-    setTagList(require('../tagList.json'));
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <TagModal />
+      <CustomModal />
       <Tag />
       <TouchableOpacity
         style={{
@@ -51,7 +52,7 @@ export default function Home() {
           borderRadius: 5,
         }}
         onPress={() => {
-          console.log(currentTheme);
+          setModal({type: 'TIMER', visible: true});
         }}>
         <Text style={{color: 'white'}}>현재 테마 확인</Text>
       </TouchableOpacity>

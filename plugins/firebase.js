@@ -2,7 +2,7 @@ import database from '@react-native-firebase/database';
 
 export const getValue = async ref => {
   return database()
-    .ref(`/${ref}`)
+    .ref(ref)
     .once('value')
     .then(snapshot => {
       return snapshot.val();

@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import {
   ActivityIndicator,
-  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -18,10 +17,10 @@ import {
   tagListState,
   themeListState,
 } from '../atoms';
-import {syncInitialData} from '../api/api';
+import {syncInitialData} from '../plugins/api';
 import {Picker} from '@react-native-picker/picker';
-import {setValue} from '../api/firebase';
-import {hasInitialData, setItem} from '../storage/storage';
+import {setValue} from '../plugins/firebase';
+import {setItem} from '../plugins/storage';
 
 const defaultTime = 50;
 
@@ -44,6 +43,7 @@ const ThemeSetting = ({navigation}) => {
 
   const setCurrentTheme = useSetRecoilState(currentThemeState);
   const ref = useRef(null);
+
   const merchantOnChange = merchantId => {
     setCurrentMerchantId(merchantId);
     const themeItems = themeList
