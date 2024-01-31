@@ -16,7 +16,7 @@ const Timer = () => {
       interval = setInterval(() => {
         const currentTime = new Date().getTime();
         setRemainTime(endTime - currentTime);
-      }, 200);
+      }, 10);
     } else {
     }
     return () => clearInterval(interval);
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   text: {
-    fontSize: 50,
+    fontSize: 30,
     color: '#FFF',
     fontWeight: '600',
   },

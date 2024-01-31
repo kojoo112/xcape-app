@@ -3,11 +3,14 @@ import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Timer from './Timer';
+import {useRecoilValue} from 'recoil';
+import {currentThemeState} from '../atoms';
 const searchIcon = require('../assets/images/search.png');
 
 const Header = () => {
   const navigation = useNavigation();
 
+  const currentTheme = useRecoilValue(currentThemeState);
   return (
     <View style={styles.container}>
       <Pressable
@@ -15,7 +18,7 @@ const Header = () => {
         onLongPress={() => {
           navigation.navigate('Settings');
         }}>
-        <Text style={styles.themeName}>기억의 틈</Text>
+        <Text style={styles.themeName}>{currentTheme.nameKo}</Text>
       </Pressable>
       {/*<Text style={styles.time}>50:00</Text>*/}
       <Timer />

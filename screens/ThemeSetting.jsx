@@ -1,7 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   ActivityIndicator,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,7 +20,6 @@ import {
   themeListState,
 } from '../atoms';
 import {syncInitialData} from '../plugins/api';
-import {Picker} from '@react-native-picker/picker';
 import {setValue} from '../plugins/firebase';
 import {setItem} from '../plugins/storage';
 
@@ -27,9 +28,7 @@ const defaultTime = 50;
 const ThemeSetting = ({navigation}) => {
   const [merchantList, setMerchantList] = useRecoilState(merchantListState);
   const [themeList, setThemeList] = useRecoilState(themeListState);
-
-  const [merchantItems, setMerchantItems] = useState([]);
-  const [themeItems, setThemeItems] = useState([]);
+  const [treeList, setTreeList] = useState([{}]);
 
   const [currentMerchantId, setCurrentMerchantId] = useState();
   const [currentThemeId, setCurrentThemeId] = useState();
@@ -41,27 +40,10 @@ const ThemeSetting = ({navigation}) => {
   const setHintList = useSetRecoilState(hintListState);
   const setTagList = useSetRecoilState(tagListState);
 
-  const setCurrentTheme = useSetRecoilState(currentThemeState);
-  const ref = useRef(null);
-
-  const merchantOnChange = merchantId => {
-    setCurrentMerchantId(merchantId);
-    const themeItems = themeList
-      .filter(theme => theme.merchantId === merchantId)
-      .map(theme => {
-        return (
-          <Picker.Item key={theme.id} label={theme.nameKo} value={theme.id} />
-        );
-      });
-    const pickerItems = [
-      <Picker.Item key={0} label="테마를 선택해 주세요." value={null} />,
-    ];
-    pickerItems.push(themeItems);
-    setThemeItems(pickerItems);
-  };
+  const [currentTheme, setCurrentTheme] = useRecoilState(currentThemeState);
 
   const saveThemeInfo = () => {
-    if (!!ref.current.props.selectedValue && runningTime > 0) {
+    if (!!currentMerchantId && !!currentThemeId && runningTime > 0) {
       const {nameKo} = themeList.find(theme => theme.id === currentThemeId);
       const currentTheme = {
         id: currentThemeId,
@@ -90,54 +72,76 @@ const ThemeSetting = ({navigation}) => {
   };
 
   useEffect(() => {
-    setMerchantItems(
-      merchantList.map(merchant => {
-        return (
-          <Picker.Item
-            key={merchant.id}
-            label={merchant.name}
-            value={merchant.id}
-          />
-        );
-      }),
-    );
-  }, [merchantList]);
+    setCurrentMerchantId(currentTheme.merchantId);
+    setCurrentThemeId(currentTheme.id);
+
+    const treeList = merchantList
+      .map(merchant => {
+        const currentThemeList = themeList
+          .filter(theme => theme.merchantId === merchant.id)
+          .sort(
+            (a, b) => (a.id !== currentTheme.id) - (b.id !== currentTheme.id),
+          );
+
+        return {
+          ...merchant,
+          themeList: currentThemeList,
+        };
+      })
+      .sort(
+        (a, b) =>
+          (a.id !== currentTheme.merchantId) -
+          (b.id !== currentTheme.merchantId),
+      );
+
+    setTreeList(treeList);
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapperBox}>
-        <View style={styles.content}>
-          <Text style={styles.label}>가맹점</Text>
-          <View style={styles.input}>
-            <Picker
-              selectedValue={currentMerchantId}
-              onValueChange={merchantId => {
-                merchantOnChange(merchantId);
-              }}>
-              {merchantItems}
-            </Picker>
-          </View>
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.label}>테마</Text>
-          <View style={styles.input}>
-            <Picker
-              ref={ref}
-              selectedValue={currentThemeId}
-              onValueChange={themeId => {
-                setCurrentThemeId(themeId);
-              }}>
-              {themeItems}
-            </Picker>
-          </View>
-        </View>
-        <View style={styles.content}>
+        {treeList &&
+          treeList.map(merchant => {
+            return (
+              <View key={merchant.id} style={styles.content}>
+                <Text style={styles.label}>{merchant.name}</Text>
+                <ScrollView style={styles.input} horizontal={true}>
+                  <View style={{flexDirection: 'row'}}>
+                    {merchant.themeList &&
+                      merchant.themeList.map(theme => {
+                        return (
+                          <TouchableOpacity
+                            key={theme.id}
+                            style={
+                              currentThemeId === theme.id
+                                ? {
+                                    ...styles.buttonGroup,
+                                    backgroundColor: '#0095F6',
+                                  }
+                                : styles.buttonGroup
+                            }
+                            onPress={() => {
+                              setCurrentMerchantId(merchant.id);
+                              setCurrentThemeId(theme.id);
+                            }}>
+                            <Text style={styles.buttonText}>
+                              {theme.nameKo}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                  </View>
+                </ScrollView>
+              </View>
+            );
+          })}
+        <View style={{...styles.content}}>
           <Text style={styles.label}>시간 설정</Text>
           <View style={styles.input}>
             <TextInput
               style={styles.timeInput}
               onChangeText={time => setRunningTime(parseInt(time))}
-              defaultValue={defaultTime.toString()}
+              defaultValue={currentTheme.runningTime.toString()}
               inputMode="decimal"
               keyboardType="numeric"
               placeholder={'분 단위'}
@@ -213,7 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   input: {
-    flex: 0.8,
+    flex: 1,
   },
   timeInput: {
     width: 100,
@@ -221,6 +225,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: 'white',
+  },
+  buttonGroup: {
+    margin: 3,
+    paddingHorizontal: 20,
+    backgroundColor: '#424753',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
   },
   button: {
     width: '95%',
