@@ -6,6 +6,8 @@ import Home from './screens/Home';
 import Header from './components/Header';
 import Settings from './screens/Settings';
 import TagView from './screens/TagView';
+import ThemeSelect from './screens/ThemeSelect';
+import TagSelect from './screens/TagSelect';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +26,16 @@ function App(): JSX.Element {
             options={{headerShown: false}}
             name="Settings"
             component={Settings}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="ThemeSelect"
+            component={ThemeSelect}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="TagSelect"
+            component={TagSelect}
           />
         </Stack.Navigator>
       </NavigationContainer>
