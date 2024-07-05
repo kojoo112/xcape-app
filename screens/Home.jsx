@@ -1,61 +1,68 @@
-import {SafeAreaView, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useEffect} from 'react';
-import Tag from '../components/Tag';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import {
   currentThemeState,
   hintListState,
   merchantListState,
-  modalState,
   tagListState,
   themeListState,
+  viewListState,
 } from '../atoms';
-import CustomModal from './CustomModal';
-import {syncInitialData} from '../plugins/api';
-import {hasInitialData, getItem} from '../plugins/storage';
+import {getItem, hasInitialData} from '../plugins/storage';
+import ProgressBar from '../components/ProgressBar';
+import Controller from '../components/Controller';
+import {Colors} from '../Colors';
+import {getOnValue} from '../plugins/firebase';
+import Loading from './Loading';
+import TagModal from '../components/TagModal';
+import PasswordModal from '../components/PasswordModal';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export default function Home() {
-  const currentTheme = useRecoilValue(currentThemeState);
-  const setCurrentTheme = useSetRecoilState(currentThemeState);
+export default function Home({navigation}) {
+  const [currentTheme, setCurrentTheme] = useRecoilState(currentThemeState);
   const setMerchantList = useSetRecoilState(merchantListState);
   const setThemeList = useSetRecoilState(themeListState);
   const setHintList = useSetRecoilState(hintListState);
   const setTagList = useSetRecoilState(tagListState);
+  const setViewList = useSetRecoilState(viewListState);
 
-  const setModal = useSetRecoilState(modalState);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     hasInitialData().then(flag => {
       if (!flag) {
-        syncInitialData(setMerchantList, setThemeList, setHintList, setTagList);
+        navigation.navigate('Download');
       } else {
+        getItem('themeId')
+          .then(themeId => {
+            return getOnValue(`/gameStatus/theme-${themeId}`, theme => {
+              if (theme) {
+                setCurrentTheme({...currentTheme, ...theme});
+              }
+            });
+          })
+          .finally(() => {
+            setLoading(false);
+          });
         getItem('merchantList').then(res => setMerchantList(JSON.parse(res)));
         getItem('themeList').then(res => setThemeList(JSON.parse(res)));
         getItem('hintList').then(res => setHintList(JSON.parse(res)));
         getItem('tagList').then(res => setTagList(JSON.parse(res)));
-        getItem('currentTheme').then(res => setCurrentTheme(JSON.parse(res)));
+        getItem('viewList').then(res => setViewList(JSON.parse(res)));
       }
     });
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomModal />
-      <Tag />
-      <TouchableOpacity
-        style={{
-          width: 200,
-          paddingHorizontal: 20,
-          backgroundColor: '#0095F6',
-          height: 40,
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 5,
-        }}
-        onPress={() => {
-          setModal({type: 'TIMER', visible: true});
-        }}>
-        <Text style={{color: 'white'}}>현재 테마 확인</Text>
-      </TouchableOpacity>
+      <KeyboardAwareScrollView>
+        <TagModal />
+        <PasswordModal />
+        {loading && <Loading />}
+        <ProgressBar />
+        <Controller />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -63,8 +70,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#353a40',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: Colors.black,
   },
 });

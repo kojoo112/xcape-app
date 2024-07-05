@@ -3,26 +3,32 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {currentThemeState} from '../atoms';
+import {Colors} from '../Colors';
 
 let interval = null;
 
 const Timer = () => {
   const currentTheme = useRecoilValue(currentThemeState);
-  const [remainTime, setRemainTime] = useState(null);
+  const [remainTime, setRemainTime] = useState(70 * 1000 * 60);
 
   useEffect(() => {
-    const {isPlaying, endTime} = currentTheme;
-    if (isPlaying) {
+    if (currentTheme?.isPlaying) {
       interval = setInterval(() => {
-        const currentTime = new Date().getTime();
-        setRemainTime(endTime - currentTime);
+        setRemainTime(currentTheme.endTime - new Date().getTime());
       }, 10);
     } else {
+      clearInterval(interval);
+      setRemainTime(currentTheme.runningTime * 60 * 1000);
     }
+
     return () => clearInterval(interval);
   }, [currentTheme]);
 
   function formatTimeString(time, showMsecs) {
+    if (isNaN(time)) {
+      return '타이머';
+    }
+
     let status;
     if (time < 0) {
       time = Math.abs(time);
@@ -38,7 +44,7 @@ const Timer = () => {
 
     let seconds = Math.floor(time / 1000);
     let minutes = Math.floor(time / 60000);
-    let hours = Math.floor(time / 3600000);
+    // let hours = Math.floor(time / 3600000);
     seconds = seconds - minutes * 60;
     // minutes = minutes - hours * 60;
 
@@ -50,13 +56,12 @@ const Timer = () => {
 
     return `${minutes < 10 ? 0 : ''}${minutes}:${
       seconds < 10 ? 0 : ''
-    }${seconds}`;
-    // :${msecs}`;
+    }${seconds}:${msecs}`;
   }
 
   return (
     <View>
-      <Text style={styles.text}>{formatTimeString(remainTime)} </Text>
+      <Text style={styles.time}>{formatTimeString(remainTime)}</Text>
     </View>
   );
 };
@@ -64,15 +69,12 @@ const Timer = () => {
 export default Timer;
 
 const styles = StyleSheet.create({
-  button: {
-    width: 40,
-    height: 50,
-    backgroundColor: 'red',
-    marginHorizontal: 5,
-  },
-  text: {
-    fontSize: 30,
-    color: '#FFF',
+  time: {
+    fontSize: 48,
+    color: Colors.white,
     fontWeight: '600',
+    backgroundColor: Colors.darker,
+    paddingHorizontal: 24,
+    borderRadius: 16,
   },
 });

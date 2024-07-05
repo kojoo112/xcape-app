@@ -18,6 +18,11 @@ export const tagListState = atom({
   default: [],
 });
 
+export const viewListState = atom({
+  key: 'viewList',
+  default: [],
+});
+
 export const merchantListState = atom({
   key: 'merchantList',
   default: [],
@@ -33,10 +38,13 @@ export const currentThemeState = atom({
   default: {
     id: 0,
     merchantId: 0,
-    nameKo: '',
-    runningTime: 0,
-    endTime: 0,
+    nameKo: '테마를 선택해 주세요.',
+    runningTime: 70,
     isPlaying: false,
-    startTime: 0,
+    startTime: new Date().getTime(),
+    endTime: new Date().getTime + 70 * 1000 * 60,
+    startDate: new Date().toString(),
+    progress: 0,
+    hintCount: 0,
   },
 });
