@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,10 +17,12 @@ import {
   merchantListState,
   tagListState,
   themeListState,
+  viewListState,
 } from '../atoms';
 import {syncInitialData} from '../plugins/api';
-import {setValue} from '../plugins/firebase';
+import {getValue, setValue} from '../plugins/firebase';
 import {setItem} from '../plugins/storage';
+import {Colors} from '../Colors';
 
 const defaultTime = 50;
 
@@ -39,33 +40,34 @@ const ThemeSetting = ({navigation}) => {
 
   const setHintList = useSetRecoilState(hintListState);
   const setTagList = useSetRecoilState(tagListState);
+  const setViewList = useSetRecoilState(viewListState);
 
   const [currentTheme, setCurrentTheme] = useRecoilState(currentThemeState);
 
   const saveThemeInfo = () => {
     if (!!currentMerchantId && !!currentThemeId && runningTime > 0) {
-      const {nameKo} = themeList.find(theme => theme.id === currentThemeId);
-      const currentTheme = {
-        id: currentThemeId,
-        merchantId: currentMerchantId,
-        nameKo,
-        runningTime,
-      };
-      setCurrentTheme(currentTheme);
-      setItem('currentTheme', JSON.stringify(currentTheme))
-        .then(() => {
-          return setValue(
-            `/gameStatus/${currentMerchantId}/${currentThemeId}`,
-            {
-              nameKo,
-              runningTime,
-              isPlaying: false,
-            },
-          );
-        })
-        .then(() => {
-          navigation.navigate('Home');
-        });
+      const findTheme = themeList.find(theme => theme.id === currentThemeId);
+
+      getValue(`/gameStatus/theme-${currentThemeId}`).then(theme => {
+        if (theme) {
+          setCurrentTheme({...theme, runningTime});
+          setItem('themeId', currentThemeId.toString()).then(() => {
+            navigation.navigate('Home');
+          });
+        } else {
+          const value = {
+            ...currentTheme,
+            id: currentThemeId,
+            merchantId: currentMerchantId,
+            nameKo: findTheme.nameKo,
+            runningTime,
+          };
+          setValue(`/gameStatus/theme-${currentThemeId}`, value).then(() => {
+            navigation.navigate('Home');
+          });
+          setCurrentTheme({...value});
+        }
+      });
     } else {
       ToastAndroid.show('테마 세팅을 해주세요!', ToastAndroid.SHORT);
     }
@@ -74,25 +76,23 @@ const ThemeSetting = ({navigation}) => {
   useEffect(() => {
     setCurrentMerchantId(currentTheme.merchantId);
     setCurrentThemeId(currentTheme.id);
+    const treeList = merchantList.map(merchant => {
+      const currentThemeList = themeList
+        .filter(theme => theme.merchantId === merchant.id)
+        .sort(
+          (a, b) => (a.id !== currentTheme.id) - (b.id !== currentTheme.id),
+        );
 
-    const treeList = merchantList
-      .map(merchant => {
-        const currentThemeList = themeList
-          .filter(theme => theme.merchantId === merchant.id)
-          .sort(
-            (a, b) => (a.id !== currentTheme.id) - (b.id !== currentTheme.id),
-          );
-
-        return {
-          ...merchant,
-          themeList: currentThemeList,
-        };
-      })
-      .sort(
-        (a, b) =>
-          (a.id !== currentTheme.merchantId) -
-          (b.id !== currentTheme.merchantId),
-      );
+      return {
+        ...merchant,
+        themeList: currentThemeList,
+      };
+    });
+    // .sort(
+    //   (a, b) =>
+    //     (a.id !== currentTheme.merchantId) -
+    //     (b.id !== currentTheme.merchantId),
+    // );
 
     setTreeList(treeList);
   }, []);
@@ -116,7 +116,7 @@ const ThemeSetting = ({navigation}) => {
                               currentThemeId === theme.id
                                 ? {
                                     ...styles.buttonGroup,
-                                    backgroundColor: '#0095F6',
+                                    backgroundColor: Colors.primary,
                                   }
                                 : styles.buttonGroup
                             }
@@ -124,7 +124,13 @@ const ThemeSetting = ({navigation}) => {
                               setCurrentMerchantId(merchant.id);
                               setCurrentThemeId(theme.id);
                             }}>
-                            <Text style={styles.buttonText}>
+                            <Text
+                              style={{
+                                color:
+                                  currentThemeId === theme.id
+                                    ? Colors.black
+                                    : Colors.white,
+                              }}>
                               {theme.nameKo}
                             </Text>
                           </TouchableOpacity>
@@ -140,8 +146,8 @@ const ThemeSetting = ({navigation}) => {
           <View style={styles.input}>
             <TextInput
               style={styles.timeInput}
-              onChangeText={time => setRunningTime(parseInt(time))}
-              defaultValue={currentTheme.runningTime.toString()}
+              onChangeText={time => setRunningTime(parseInt(time, 10))}
+              defaultValue={defaultTime.toString()}
               inputMode="decimal"
               keyboardType="numeric"
               placeholder={'분 단위'}
@@ -166,6 +172,7 @@ const ThemeSetting = ({navigation}) => {
             setThemeList,
             setHintList,
             setTagList,
+            setViewList,
           ).then(() => setSynchronizing(false));
         }}>
         <View style={{flexDirection: 'row'}}>
@@ -173,16 +180,6 @@ const ThemeSetting = ({navigation}) => {
           {synchronizing ? <ActivityIndicator /> : <></>}
         </View>
       </TouchableOpacity>
-
-      {/*<Button*/}
-      {/*  title="확인"*/}
-      {/*  onPress={() =>*/}
-      {/*    AsyncStorage.getAllKeys(null).then(res => console.log(res))*/}
-      {/*  }></Button>*/}
-      {/*<Button*/}
-      {/*  title="삭제"*/}
-      {/*  color="red"*/}
-      {/*  onPress={() => AsyncStorage.clear().then(hasInitialData)}></Button>*/}
     </View>
   );
 };
@@ -192,7 +189,7 @@ export default ThemeSetting;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#353a40',
+    backgroundColor: Colors.black,
     justifyContent: 'center',
   },
   wrapperBox: {
@@ -239,13 +236,13 @@ const styles = StyleSheet.create({
     width: '95%',
     margin: 15,
     paddingHorizontal: 20,
-    backgroundColor: '#0095F6',
+    backgroundColor: Colors.primary,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
   },
   buttonText: {
-    color: 'white',
+    color: Colors.black,
   },
 });

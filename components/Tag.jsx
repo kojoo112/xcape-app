@@ -30,12 +30,12 @@ const Tag = () => {
     <Pressable
       style={styles.tag}
       onPress={() => {
-        readNdef().then(tag => {
-          if (tag) {
-            const payload = Ndef.text.decodePayload(tag.ndefMessage[0].payload);
-            const find = tagList.find(asdf => asdf.tagId === payload);
-            if (find) {
-              navigation.navigate('TagView', {viewList: find.viewList});
+        readNdef().then(nfc => {
+          if (nfc) {
+            const payload = Ndef.text.decodePayload(nfc.ndefMessage[0].payload);
+            const tagView = tagList.find(tag => tag.tagId === payload);
+            if (tagView) {
+              navigation.navigate('TagView', {viewList: tagView.viewList});
             }
           }
         });

@@ -9,10 +9,10 @@ import {
 import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useRecoilValue} from 'recoil';
-import {tagListState} from '../../atoms';
+import {viewListState} from '../../atoms';
 
 const PasswordTagView = props => {
-  const tagList = useRecoilValue(tagListState);
+  const viewList = useRecoilValue(viewListState);
   const [password, setPassword] = useState(null);
   const navigation = useNavigation();
   const passwordRef = useRef();
@@ -22,8 +22,10 @@ const PasswordTagView = props => {
   const isAnswer = async () => {
     try {
       if (answer === password.toUpperCase()) {
-        const find = tagList.find(tag => tag.tagId === props.moveToTag);
-        navigation.push('TagView', {viewList: find.viewList});
+        const viewListByTagId = viewList
+          .filter(view => view.tagId === props.targetTagId)
+          .sort((a, b) => a.orders - b.orders);
+        navigation.push('TagView', {viewList: viewListByTagId});
       } else {
         ToastAndroid.show('잘못된 입력입니다.', ToastAndroid.SHORT);
         setPassword('');

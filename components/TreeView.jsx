@@ -1,12 +1,6 @@
 import React, {useState} from 'react';
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const TreeView = ({data, level}) => {
@@ -51,8 +45,5 @@ export default TreeView;
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 3,
-    // borderBottomWidth: 1,
-    // borderColor: 'white',
-    // borderBottomColor,
   },
 });

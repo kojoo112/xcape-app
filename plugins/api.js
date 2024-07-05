@@ -1,12 +1,12 @@
 import axios from 'axios';
 import {setItem} from './storage';
-import {getValue} from './firebase';
 
 export const syncInitialData = async (
   setMerchantList,
   setThemeList,
   setHintList,
   setTagList,
+  setViewList,
 ) => {
   await axios
     .get(
@@ -26,17 +26,30 @@ export const syncInitialData = async (
       return setItem('themeList', JSON.stringify(res.data));
     })
     .then(() => {
-      return getValue('/newHintList');
+      return axios.get(
+        'https://xcape-business-sdk-uploads-dev.s3.ap-northeast-2.amazonaws.com/json/hint/release.json',
+      );
     })
-    .then(hintList => {
-      setHintList(hintList);
-      return setItem('hintList', JSON.stringify(hintList));
+    .then(res => {
+      setHintList(res.data);
+      return setItem('hintList', JSON.stringify(res.data));
     })
     .then(() => {
-      return getValue('/newTagList');
+      return axios.get(
+        'https://xcape-business-sdk-uploads-dev.s3.ap-northeast-2.amazonaws.com/json/tag/release.json',
+      );
     })
-    .then(tagList => {
-      setTagList(tagList);
-      return setItem('tagList', JSON.stringify(tagList));
+    .then(res => {
+      setTagList(res.data);
+      return setItem('tagList', JSON.stringify(res.data));
+    })
+    .then(() => {
+      return axios.get(
+        'https://xcape-business-sdk-uploads-dev.s3.ap-northeast-2.amazonaws.com/json/view/release.json',
+      );
+    })
+    .then(res => {
+      setViewList(res.data);
+      return setItem('viewList', JSON.stringify(res.data));
     });
 };
