@@ -3,14 +3,14 @@ import React from 'react';
 import ImageView from '../components/views/ImageView';
 import VideoView from '../components/views/VideoView';
 import AudioView from '../components/views/AudioView';
-import PasswordTagView from '../components/views/PasswordTagView';
+import AnswerView from '../components/views/AnswerView';
 import CameraView from '../components/views/CameraView';
 
 const hintView = {
   IMAGE: ImageView,
   VIDEO: VideoView,
   AUDIO: AudioView,
-  ANSWER: PasswordTagView,
+  ANSWER: AnswerView,
   CAMERA: CameraView,
 };
 

@@ -11,7 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useRecoilValue} from 'recoil';
 import {viewListState} from '../../atoms';
 
-const PasswordTagView = props => {
+const AnswerView = props => {
   const viewList = useRecoilValue(viewListState);
   const [password, setPassword] = useState(null);
   const navigation = useNavigation();
@@ -58,7 +58,7 @@ const PasswordTagView = props => {
   );
 };
 
-export default PasswordTagView;
+export default AnswerView;
 
 const styles = StyleSheet.create({
   container: {
