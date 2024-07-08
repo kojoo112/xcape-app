@@ -6,7 +6,7 @@ import Gradient from '../Gradient';
 
 const neonSlash = [Colors.neonYellow, Colors.neonGreen];
 
-const HintView = () => {
+const HintView = ({message1, message2}) => {
   const [messageVisible, setMessageVisible] = useState(false);
 
   return (
@@ -26,7 +26,7 @@ const HintView = () => {
           marginVertical: 16,
         }}>
         <View style={styles.subMessageContainer}>
-          <Text style={styles.hintMessage}>asdfsasdfasdfadf</Text>
+          <Text style={styles.hintMessage}>{message1}</Text>
         </View>
       </Gradient>
       <Gradient
@@ -50,12 +50,7 @@ const HintView = () => {
               </Text>
             </Pressable>
           ) : (
-            <Text style={styles.hintMessage}>
-              이게 힌트 메세지인데요 ㅋㅋ 일단 자물쇠를 누르면 이렇게 메인
-              힌트가 보입니다. 기존처럼 얼럿창으로 한번 더 묻는 것이 아닌 그냥
-              보여주는게 전 나아보여요 근데 힌트가 이렇게 길어진다면 어떻게
-              보일지 너무너무너무너무너무너무 궁금하네요를레이호
-            </Text>
+            <Text style={styles.hintMessage}>{message2}</Text>
           )}
         </View>
       </Gradient>
@@ -67,7 +62,7 @@ export default HintView;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    padding: 16,
     backgroundColor: Colors.black,
   },
   header: {

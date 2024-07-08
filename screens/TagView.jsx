@@ -13,7 +13,7 @@ const hintView = {
   AUDIO: AudioView,
   ANSWER: AnswerView,
   CAMERA: CameraView,
-  Hint: HintView,
+  HINT: HintView,
 };
 
 const TagView = props => {
@@ -21,9 +21,9 @@ const TagView = props => {
 
   return (
     <ScrollView style={{backgroundColor: 'black'}}>
-      <HintView />
       {viewList.map(view => {
-        const {type, answer, targetTagId, height, url} = view;
+        const {type, answer, targetTagId, height, url, message1, message2} =
+          view;
         const Component = hintView[type];
 
         return (
@@ -33,6 +33,8 @@ const TagView = props => {
             targetTagId={targetTagId}
             height={height}
             url={url}
+            message1={message1}
+            message2={message2}
           />
         );
       })}
