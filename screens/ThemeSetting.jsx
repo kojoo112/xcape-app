@@ -76,7 +76,7 @@ const ThemeSetting = ({navigation}) => {
   useEffect(() => {
     setCurrentMerchantId(currentTheme.merchantId);
     setCurrentThemeId(currentTheme.id);
-    const treeList = merchantList.map(merchant => {
+    const tree = merchantList.map(merchant => {
       const currentThemeList = themeList
         .filter(theme => theme.merchantId === merchant.id)
         .sort(
@@ -88,13 +88,8 @@ const ThemeSetting = ({navigation}) => {
         themeList: currentThemeList,
       };
     });
-    // .sort(
-    //   (a, b) =>
-    //     (a.id !== currentTheme.merchantId) -
-    //     (b.id !== currentTheme.merchantId),
-    // );
 
-    setTreeList(treeList);
+    setTreeList(tree);
   }, []);
 
   return (
@@ -111,7 +106,7 @@ const ThemeSetting = ({navigation}) => {
                       merchant.themeList.map(theme => {
                         return (
                           <TouchableOpacity
-                            key={theme.id}
+                            key={theme.id + 100}
                             style={
                               currentThemeId === theme.id
                                 ? {

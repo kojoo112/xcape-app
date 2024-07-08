@@ -35,11 +35,12 @@ const styles = StyleSheet.create({
     width: 240,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.neonYellow,
     borderRadius: 16,
   },
   text: {
     color: Colors.black,
     fontSize: 24,
+    fontWeight: '700',
   },
 });

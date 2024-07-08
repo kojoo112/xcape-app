@@ -23,7 +23,7 @@ const TagSelect = ({route}) => {
   };
 
   return (
-    <ScrollView style={{backgroundColor: Colors.black}}>
+    <ScrollView style={{backgroundColor: Colors.black, paddingVertical: 12}}>
       <List
         list={tagListByThemeId}
         displayName={'name'}

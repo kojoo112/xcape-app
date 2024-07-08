@@ -5,6 +5,7 @@ import VideoView from '../components/views/VideoView';
 import AudioView from '../components/views/AudioView';
 import AnswerView from '../components/views/AnswerView';
 import CameraView from '../components/views/CameraView';
+import HintView from '../components/views/HintView';
 
 const hintView = {
   IMAGE: ImageView,
@@ -12,6 +13,7 @@ const hintView = {
   AUDIO: AudioView,
   ANSWER: AnswerView,
   CAMERA: CameraView,
+  Hint: HintView,
 };
 
 const TagView = props => {
@@ -19,6 +21,7 @@ const TagView = props => {
 
   return (
     <ScrollView style={{backgroundColor: 'black'}}>
+      <HintView />
       {viewList.map(view => {
         const {type, answer, targetTagId, height, url} = view;
         const Component = hintView[type];
