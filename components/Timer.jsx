@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: '600',
     backgroundColor: Colors.darker,
-    paddingHorizontal: 24,
+    paddingHorizontal: 12,
     borderRadius: 16,
   },
 });

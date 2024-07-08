@@ -15,12 +15,12 @@ import {useNavigation} from '@react-navigation/native';
 import {setValue} from '../plugins/firebase';
 import {useRecoilState} from 'recoil';
 import {currentThemeState} from '../atoms';
-import LinearGradient from 'react-native-linear-gradient';
 import ResetIcon from './icons/ResetIcon';
 import MenuIcon from './icons/MenuIcon';
 import EyeIcon from './icons/EyeIcon';
 import EyeOffIcon from './icons/EyeOffIcon';
 import CloseIcon from './icons/CloseIcon';
+import Gradient from './Gradient';
 
 const PasswordModal = () => {
   const navigation = useNavigation();
@@ -68,8 +68,8 @@ const PasswordModal = () => {
 
   const getGradientColor = () => {
     return action === Action.RESET
-      ? ['rgba(111, 2, 178, 0.70)', 'rgba(255, 67, 67, 0.70)']
-      : ['rgba(111, 2, 178, 0.70)', 'rgba(31, 255, 201, 0.70)'];
+      ? ['rgba(255, 67, 67, 0.70)', 'rgba(111, 2, 178, 0.70)']
+      : ['rgba(31, 255, 201, 0.70)', 'rgba(111, 2, 178, 0.70)'];
   };
 
   const getIcon = () => {
@@ -83,14 +83,11 @@ const PasswordModal = () => {
   return (
     <ModalComponent modalVisible={passwordModalVisible}>
       <View style={styles.centeredView}>
-        <LinearGradient
+        <Gradient
           colors={getGradientColor()}
-          style={{
-            width: '90%',
-            alignItems: 'center',
-            paddingVertical: 32,
-            borderRadius: 15,
-          }}>
+          style={styles.gradient}
+          start={{x: 0, y: 1}}
+          end={{x: 0, y: 0}}>
           <TouchableOpacity
             onPress={() => {
               closePasswordModal();
@@ -121,7 +118,7 @@ const PasswordModal = () => {
               )}
             </Pressable>
           </View>
-        </LinearGradient>
+        </Gradient>
       </View>
     </ModalComponent>
   );
@@ -135,6 +132,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+  },
+  gradient: {
+    width: '90%',
+    alignItems: 'center',
+    paddingVertical: 32,
+    borderRadius: 15,
   },
   modalView: {
     backgroundColor: Colors.black,
@@ -172,8 +175,6 @@ const styles = StyleSheet.create({
     right: 0,
     paddingHorizontal: 32,
     paddingVertical: 16,
-    // backgroundColor: '#0F172A',
-    // borderRadius: 8,
   },
   actionText: {
     color: Colors.white,
