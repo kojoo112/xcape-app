@@ -20,6 +20,7 @@ import {readTag} from '../plugins/nfc';
 import {useNavigation} from '@react-navigation/native';
 import SearchIcon from './icons/SearchIcon';
 import {formatDate} from '../util/dateFormat';
+import PretendardText from './PretendardText';
 
 const Controller = () => {
   const navigation = useNavigation();
@@ -112,13 +113,13 @@ const Controller = () => {
           </TouchableOpacity>
         )}
         <View style={styles.metaContainer}>
-          <Text style={styles.themeName}>
+          <PretendardText style={styles.themeName}>
             {currentTheme?.nameKo || '테마를 선택해주세요.'}
-          </Text>
-          <Text style={styles.startDate}>
+          </PretendardText>
+          <PretendardText style={styles.startDate}>
             {formatDate(new Date(currentTheme?.startDate)) ||
               formatDate(new Date())}
-          </Text>
+          </PretendardText>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   },
   startText: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: Colors.primary,
   },
   metaContainer: {

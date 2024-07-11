@@ -4,6 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {currentThemeState} from '../atoms';
 import {Colors} from '../Colors';
+import PretendardText from './PretendardText';
 
 let interval = null;
 
@@ -61,7 +62,9 @@ const Timer = () => {
 
   return (
     <View>
-      <Text style={styles.time}>{formatTimeString(remainTime)}</Text>
+      <PretendardText style={styles.time}>
+        {formatTimeString(remainTime)}
+      </PretendardText>
     </View>
   );
 };
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 48,
     color: Colors.white,
-    fontWeight: '600',
+    fontWeight: '700',
     backgroundColor: Colors.darker,
     paddingHorizontal: 12,
     borderRadius: 16,

@@ -5,6 +5,7 @@ import Timer from './Timer';
 import {Colors} from '../Colors';
 import {useRecoilValue} from 'recoil';
 import {currentThemeState} from '../atoms';
+import PretendardText from './PretendardText';
 
 const Header = () => {
   const currentTheme = useRecoilValue(currentThemeState);
@@ -13,14 +14,14 @@ const Header = () => {
     <View style={styles.container}>
       <Timer />
       <View style={styles.hintCountContainer}>
-        <Text
+        <PretendardText
           style={
             currentTheme.hintCount === 0
               ? styles.zeroCount
               : styles.positiveCount
           }>
           {currentTheme.hintCount}
-        </Text>
+        </PretendardText>
       </View>
     </View>
   );
