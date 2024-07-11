@@ -19,6 +19,7 @@ import {usePasswordModal} from '../context/PasswordModalContext';
 import {readTag} from '../plugins/nfc';
 import {useNavigation} from '@react-navigation/native';
 import SearchIcon from './icons/SearchIcon';
+import {formatDate} from '../util/dateFormat';
 
 const Controller = () => {
   const navigation = useNavigation();
@@ -115,7 +116,8 @@ const Controller = () => {
             {currentTheme?.nameKo || '테마를 선택해주세요.'}
           </Text>
           <Text style={styles.startDate}>
-            {currentTheme?.startDate || new Date().toUTCString()}
+            {formatDate(new Date(currentTheme?.startDate)) ||
+              formatDate(new Date())}
           </Text>
         </View>
       </View>

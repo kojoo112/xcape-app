@@ -24,7 +24,7 @@ const Timer = () => {
     return () => clearInterval(interval);
   }, [currentTheme]);
 
-  function formatTimeString(time, showMsecs) {
+  const formatTimeString = (time, showMsecs) => {
     if (isNaN(time)) {
       return '타이머';
     }
@@ -57,7 +57,7 @@ const Timer = () => {
     return `${minutes < 10 ? 0 : ''}${minutes}:${
       seconds < 10 ? 0 : ''
     }${seconds}:${msecs}`;
-  }
+  };
 
   return (
     <View>

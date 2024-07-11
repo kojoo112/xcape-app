@@ -35,7 +35,7 @@ export const currentThemeState = atom({
     isPlaying: false,
     startTime: new Date().getTime(),
     endTime: new Date().getTime + 70 * 1000 * 60,
-    startDate: new Date().toString(),
+    startDate: new Date(),
     progress: 0,
     hintCount: 0,
     tagList: [],
