@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {tagListState} from '../atoms';
 import {useTagModal} from '../context/TagModalContext';
@@ -23,14 +23,16 @@ const TagSelect = ({route}) => {
   };
 
   return (
-    <ScrollView style={{backgroundColor: Colors.black, paddingVertical: 12}}>
-      <List
-        list={tagListByThemeId}
-        displayName={'name'}
-        onPress={value => {
-          writeTagId(value);
-        }}
-      />
+    <ScrollView>
+      <View style={{paddingVertical: 10, backgroundColor: Colors.black}}>
+        <List
+          list={tagListByThemeId}
+          displayName={'name'}
+          onPress={value => {
+            writeTagId(value);
+          }}
+        />
+      </View>
     </ScrollView>
   );
 };

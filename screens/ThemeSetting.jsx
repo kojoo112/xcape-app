@@ -23,6 +23,7 @@ import {syncInitialData} from '../plugins/api';
 import {getValue, setValue} from '../plugins/firebase';
 import {setItem} from '../plugins/storage';
 import {Colors} from '../Colors';
+import PretendardText from '../components/PretendardText';
 
 const defaultTime = 50;
 
@@ -110,7 +111,9 @@ const ThemeSetting = ({navigation}) => {
           treeList.map(merchant => {
             return (
               <View key={merchant.id} style={styles.content}>
-                <Text style={styles.label}>{merchant.name}</Text>
+                <PretendardText style={styles.label}>
+                  {merchant.name}
+                </PretendardText>
                 <ScrollView style={styles.input} horizontal={true}>
                   <View style={{flexDirection: 'row'}}>
                     {merchant.themeList &&
@@ -130,7 +133,7 @@ const ThemeSetting = ({navigation}) => {
                               setCurrentMerchantId(merchant.id);
                               setCurrentThemeId(theme.id);
                             }}>
-                            <Text
+                            <PretendardText
                               style={{
                                 color:
                                   currentThemeId === theme.id
@@ -138,7 +141,7 @@ const ThemeSetting = ({navigation}) => {
                                     : Colors.white,
                               }}>
                               {theme.nameKo}
-                            </Text>
+                            </PretendardText>
                           </TouchableOpacity>
                         );
                       })}
@@ -148,7 +151,7 @@ const ThemeSetting = ({navigation}) => {
             );
           })}
         <View style={{...styles.content}}>
-          <Text style={styles.label}>시간 설정</Text>
+          <PretendardText style={styles.label}>시간 설정</PretendardText>
           <View style={styles.input}>
             <TextInput
               style={styles.timeInput}
@@ -182,7 +185,7 @@ const ThemeSetting = ({navigation}) => {
           ).then(() => setSynchronizing(false));
         }}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.buttonText}>힌트 동기화</Text>
+          <PretendardText style={styles.buttonText}>힌트 동기화</PretendardText>
           {synchronizing ? <ActivityIndicator /> : <></>}
         </View>
       </TouchableOpacity>
@@ -226,8 +229,8 @@ const styles = StyleSheet.create({
     width: 100,
     backgroundColor: '#717171',
     fontSize: 16,
-    fontWeight: '700',
     color: 'white',
+    fontFamily: 'Pretendard',
   },
   buttonGroup: {
     margin: 3,
