@@ -12,7 +12,7 @@ const Timer = () => {
   const [remainTime, setRemainTime] = useState(70 * 1000 * 60);
 
   useEffect(() => {
-    if (currentTheme?.isPlaying) {
+    if (currentTheme.isPlaying) {
       interval = setInterval(() => {
         setRemainTime(currentTheme.endTime - new Date().getTime());
       }, 10);

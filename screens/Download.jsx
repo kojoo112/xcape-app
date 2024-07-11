@@ -1,12 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, ToastAndroid, View} from 'react-native';
 import {syncInitialData} from '../plugins/api';
 import {useSetRecoilState} from 'recoil';
 import {
@@ -16,6 +10,8 @@ import {
   themeListState,
   viewListState,
 } from '../atoms';
+import {useInitialLoading} from '../context/InitialLoadingContext';
+import {Colors} from '../Colors';
 
 const Download = ({navigation}) => {
   const setMerchantList = useSetRecoilState(merchantListState);
@@ -23,6 +19,8 @@ const Download = ({navigation}) => {
   const setHintList = useSetRecoilState(hintListState);
   const setTagList = useSetRecoilState(tagListState);
   const setViewList = useSetRecoilState(viewListState);
+
+  const {setLoading} = useInitialLoading();
 
   useEffect(() => {
     syncInitialData(
@@ -35,6 +33,7 @@ const Download = ({navigation}) => {
       .then(() => {
         ToastAndroid.show('리소스 다운로드 성공!', ToastAndroid.SHORT);
         navigation.navigate('Home');
+        setLoading(false);
       })
       .catch(e => {
         console.error(e);
@@ -44,8 +43,10 @@ const Download = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Download Page</Text>
-      <ActivityIndicator />
+      <Image
+        source={require('../assets/images/progress-logo.png')}
+        tintColor={'white'}
+      />
     </View>
   );
 };
@@ -55,5 +56,8 @@ export default Download;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.black,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

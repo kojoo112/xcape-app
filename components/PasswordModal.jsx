@@ -35,14 +35,21 @@ const PasswordModal = () => {
 
   const resetGame = () => {
     if (currentTheme.id > 0 && currentTheme.merchantId > 0) {
-      setValue(`/gameStatus/theme-${currentTheme.id}`, {
+      const resetUsedTagList = currentTheme.usedTagIdList.map(({id}) => {
+        return {id, isUsed: false};
+      });
+
+      const resetThemeValue = {
         ...currentTheme,
         isPlaying: false,
+        hintCount: 0,
+        progress: 0,
+        usedTagIdList: resetUsedTagList,
+      };
+      setValue(`/gameStatus/theme-${currentTheme.id}`, {
+        ...resetThemeValue,
       }).then(() => {
-        setCurrentTheme({
-          ...currentTheme,
-          isPlaying: false,
-        });
+        setCurrentTheme({...resetThemeValue});
         closePasswordModal();
       });
     }

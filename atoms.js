@@ -1,13 +1,5 @@
 import {atom} from 'recoil';
 
-export const modalState = atom({
-  key: 'modal',
-  default: {
-    type: '',
-    visible: false,
-  },
-});
-
 export const hintListState = atom({
   key: 'hintList',
   default: [],
@@ -46,5 +38,7 @@ export const currentThemeState = atom({
     startDate: new Date().toString(),
     progress: 0,
     hintCount: 0,
+    tagList: [],
+    usedTagIdList: [],
   },
 });

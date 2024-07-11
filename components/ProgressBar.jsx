@@ -5,14 +5,17 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {Circle} from 'react-native-svg';
 import Progress from './Progress';
 import {Colors} from '../Colors';
+import {useRecoilValue} from 'recoil';
+import {currentThemeState} from '../atoms';
 
 const ProgressBar = () => {
+  const currentTheme = useRecoilValue(currentThemeState);
   return (
     <View style={styles.container}>
       <AnimatedCircularProgress
         size={300}
         width={40}
-        fill={70}
+        fill={currentTheme?.progress || 0}
         tintColor={'#fef104'}
         backgroundColor={'#323232'}
         rotation={210}
@@ -20,7 +23,7 @@ const ProgressBar = () => {
         lineCap={'round'}
         arcSweepAngle={300}
         renderCap={({center}) => (
-          <Circle cx={center.x} cy={center.y} r="10" fill="black" />
+          <Circle cx={center.x} cy={center.y} r={'10'} fill={Colors.black} />
         )}>
         {fill =>
           fill > 0 ? (

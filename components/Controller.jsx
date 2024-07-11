@@ -1,11 +1,12 @@
 import React from 'react';
 
 import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
   Pressable,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import {Colors} from '../Colors';
 import {useRecoilState, useRecoilValue} from 'recoil';
@@ -29,22 +30,26 @@ const Controller = () => {
   const {openPasswordModal, settingAction, resetAction} = usePasswordModal();
 
   const startGame = () => {
-    const startTime = new Date().getTime();
-    const timeStatus = {
-      startTime,
-      endTime: startTime + currentTheme.runningTime * 60 * 1000,
-      startDate: new Date().toString(),
-      isPlaying: true,
-    };
-    setValue(`/gameStatus/theme-${currentTheme.id}`, {
-      ...currentTheme,
-      ...timeStatus,
-    }).then(() => {
-      setCurrentTheme({
+    if (currentTheme.id === 0) {
+      ToastAndroid.show('테마를 선택해 주세요.', ToastAndroid.SHORT);
+    } else {
+      const startTime = new Date().getTime();
+      const timeStatus = {
+        startTime,
+        endTime: startTime + currentTheme.runningTime * 60 * 1000,
+        startDate: new Date().toString(),
+        isPlaying: true,
+      };
+      setValue(`/gameStatus/theme-${currentTheme.id}`, {
         ...currentTheme,
         ...timeStatus,
+      }).then(() => {
+        setCurrentTheme({
+          ...currentTheme,
+          ...timeStatus,
+        });
       });
-    });
+    }
   };
 
   const resetGame = () => {
@@ -54,10 +59,19 @@ const Controller = () => {
 
   const getViewListByTagId = tagId => {
     if (tagId && typeof tagId === 'number') {
-      const viewListByTagId = viewList
-        .filter(tag => tag.tagId === tagId)
-        .sort((a, b) => a.orders - b.orders);
-      navigation.navigate('TagView', {viewList: viewListByTagId});
+      const hasTagId = currentTheme.tagList.some(
+        currentTag => currentTag.id === tagId,
+      );
+
+      if (hasTagId) {
+        const viewListByTagId = viewList
+          .filter(tag => tag.tagId === tagId)
+          .sort((a, b) => a.orders - b.orders);
+
+        navigation.navigate('TagView', {tagId, viewList: viewListByTagId});
+      } else {
+        ToastAndroid.show('해당 테마의 태그가 아닙니다.', ToastAndroid.SHORT);
+      }
     }
   };
 
