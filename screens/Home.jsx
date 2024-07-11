@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 import {
   currentThemeState,
@@ -18,6 +18,7 @@ import Loading from './Loading';
 import TagModal from '../components/TagModal';
 import PasswordModal from '../components/PasswordModal';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useInitialLoading} from '../context/InitialLoadingContext';
 
 export default function Home({navigation}) {
   const [currentTheme, setCurrentTheme] = useRecoilState(currentThemeState);
@@ -27,29 +28,28 @@ export default function Home({navigation}) {
   const setTagList = useSetRecoilState(tagListState);
   const setViewList = useSetRecoilState(viewListState);
 
-  const [loading, setLoading] = useState(true);
+  const {loading, setLoading} = useInitialLoading();
 
   useEffect(() => {
     hasInitialData().then(flag => {
       if (!flag) {
         navigation.navigate('Download');
       } else {
-        getItem('themeId')
-          .then(themeId => {
-            return getOnValue(`/gameStatus/theme-${themeId}`, theme => {
-              if (theme) {
-                setCurrentTheme({...currentTheme, ...theme});
-              }
-            });
-          })
-          .finally(() => {
-            setLoading(false);
-          });
         getItem('merchantList').then(res => setMerchantList(JSON.parse(res)));
         getItem('themeList').then(res => setThemeList(JSON.parse(res)));
         getItem('hintList').then(res => setHintList(JSON.parse(res)));
         getItem('tagList').then(res => setTagList(JSON.parse(res)));
         getItem('viewList').then(res => setViewList(JSON.parse(res)));
+        getItem('themeId').then(themeId => {
+          return getOnValue(`/gameStatus/theme-${themeId}`, theme => {
+            if (theme) {
+              setCurrentTheme(() => {
+                setLoading(false);
+                return {...currentTheme, ...theme};
+              });
+            }
+          });
+        });
       }
     });
   }, []);

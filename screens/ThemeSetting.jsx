@@ -39,9 +39,9 @@ const ThemeSetting = ({navigation}) => {
   const [synchronizing, setSynchronizing] = useState(false);
 
   const setHintList = useSetRecoilState(hintListState);
-  const setTagList = useSetRecoilState(tagListState);
   const setViewList = useSetRecoilState(viewListState);
 
+  const [tagList, setTagList] = useRecoilState(tagListState);
   const [currentTheme, setCurrentTheme] = useRecoilState(currentThemeState);
 
   const saveThemeInfo = () => {
@@ -55,13 +55,24 @@ const ThemeSetting = ({navigation}) => {
             navigation.navigate('Home');
           });
         } else {
+          const tagListByThemeId = tagList.filter(
+            tag => tag.themeId === currentThemeId,
+          );
+
+          const usedTagIdList = tagListByThemeId.map(tag => {
+            return {id: tag.id, isUsed: false};
+          });
+
           const value = {
             ...currentTheme,
             id: currentThemeId,
             merchantId: currentMerchantId,
             nameKo: findTheme.nameKo,
             runningTime,
+            tagList: tagListByThemeId,
+            usedTagIdList,
           };
+
           setValue(`/gameStatus/theme-${currentThemeId}`, value).then(() => {
             navigation.navigate('Home');
           });
@@ -106,7 +117,7 @@ const ThemeSetting = ({navigation}) => {
                       merchant.themeList.map(theme => {
                         return (
                           <TouchableOpacity
-                            key={theme.id + 100}
+                            key={theme.id + 1000}
                             style={
                               currentThemeId === theme.id
                                 ? {

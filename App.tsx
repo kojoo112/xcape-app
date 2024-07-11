@@ -13,35 +13,38 @@ import Download from './screens/Download';
 import {TagModalProvider} from './context/TagModalContext';
 import {PasswordModalProvider} from './context/PasswordModalContext';
 import Select from './components/Select';
+import {InitialLoadingProvider} from './context/InitialLoadingContext';
 
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
   return (
     <RecoilRoot>
-      <TagModalProvider>
-        <PasswordModalProvider>
-          <NavigationContainer>
-            <Stack.Navigator
-              initialRouteName={'Home'}
-              screenOptions={{
-                header: ({route}) => {
-                  if (route.name === 'Home' || route.name === 'TagView') {
-                    return <Header />;
-                  }
-                },
-              }}>
-              <Stack.Screen name={'Home'} component={Home} />
-              <Stack.Screen name={'TagView'} component={TagView} />
-              <Stack.Screen name={'Download'} component={Download} />
-              <Stack.Screen name={'Settings'} component={Settings} />
-              <Stack.Screen name={'ThemeSelect'} component={ThemeSelect} />
-              <Stack.Screen name={'TagSelect'} component={TagSelect} />
-              <Stack.Screen name={'Select'} component={Select} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </PasswordModalProvider>
-      </TagModalProvider>
+      <InitialLoadingProvider>
+        <TagModalProvider>
+          <PasswordModalProvider>
+            <NavigationContainer>
+              <Stack.Navigator
+                initialRouteName={'Home'}
+                screenOptions={{
+                  header: ({route}) => {
+                    if (route.name === 'Home' || route.name === 'TagView') {
+                      return <Header />;
+                    }
+                  },
+                }}>
+                <Stack.Screen name={'Home'} component={Home} />
+                <Stack.Screen name={'TagView'} component={TagView} />
+                <Stack.Screen name={'Download'} component={Download} />
+                <Stack.Screen name={'Settings'} component={Settings} />
+                <Stack.Screen name={'ThemeSelect'} component={ThemeSelect} />
+                <Stack.Screen name={'TagSelect'} component={TagSelect} />
+                <Stack.Screen name={'Select'} component={Select} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </PasswordModalProvider>
+        </TagModalProvider>
+      </InitialLoadingProvider>
     </RecoilRoot>
   );
 }
