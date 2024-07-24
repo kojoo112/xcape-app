@@ -1,5 +1,5 @@
 export const Colors = {
-  neonSlash: ['#BFFF00', '#FFF100'],
+  neonSlash: ['#FFF100', '#BFFF00'],
   primary: '#C0FF03',
   neonGreen: '#BFFF00',
   neonYellow: '#FFF100',

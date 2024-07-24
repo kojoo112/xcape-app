@@ -2,12 +2,16 @@ import React from 'react';
 
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors} from '../../Colors';
-import PretendardText from '../PretendardText';
+import GradientText from '../GradientText';
 
-const ActionButton = ({text, action}) => {
+const ActionButton = ({text, onPress}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => action()}>
-      <PretendardText style={styles.text}>{text}</PretendardText>
+    <TouchableOpacity style={styles.container} onPress={() => onPress()}>
+      <GradientText
+        colors={Colors.neonSlash}
+        textStyle={styles.text}
+        text={text}
+      />
     </TouchableOpacity>
   );
 };
@@ -25,7 +29,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    color: Colors.neonGreen,
     fontWeight: '700',
   },
 });

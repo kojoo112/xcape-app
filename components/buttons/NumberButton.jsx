@@ -1,15 +1,19 @@
 import React from 'react';
 
 import {Pressable, StyleSheet} from 'react-native';
-import PretendardText from '../PretendardText';
 import {Colors} from '../../Colors';
 import Gradient from '../Gradient';
+import GradientText from '../GradientText';
 
-const NumberButton = ({number, action}) => {
+const NumberButton = ({number, onPress}) => {
   return (
     <Gradient colors={Colors.neonSlash} style={{padding: 1}}>
-      <Pressable style={styles.container} onPress={() => action()}>
-        <PretendardText style={styles.number}>{number}</PretendardText>
+      <Pressable style={styles.container} onPress={() => onPress()}>
+        <GradientText
+          colors={Colors.neonSlash}
+          textStyle={styles.number}
+          text={number}
+        />
       </Pressable>
     </Gradient>
   );
@@ -26,7 +30,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
   },
   number: {
-    color: Colors.neonGreen,
     fontSize: 48,
     fontWeight: '700',
   },
