@@ -32,6 +32,7 @@ const AnswerView = props => {
       passwordRef.current.clear();
     }
   };
+
   const placeholder = '*'.repeat(props.answer.length);
 
   return (
