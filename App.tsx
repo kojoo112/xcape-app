@@ -14,6 +14,7 @@ import {TagModalProvider} from './context/TagModalContext';
 import {PasswordModalProvider} from './context/PasswordModalContext';
 import Select from './components/Select';
 import {InitialLoadingProvider} from './context/InitialLoadingContext';
+import ButtonPadlock from './components/views/lock/ButtonPadlock';
 import KeypadLock from './components/views/lock/KeypadLock';
 
 const Stack = createNativeStackNavigator();
@@ -26,7 +27,7 @@ function App(): JSX.Element {
           <PasswordModalProvider>
             <NavigationContainer>
               <Stack.Navigator
-                initialRouteName={'KeypadLock'}
+                initialRouteName={'Home'}
                 screenOptions={{
                   header: ({route}) => {
                     if (route.name === 'Home' || route.name === 'TagView') {
@@ -41,7 +42,6 @@ function App(): JSX.Element {
                 <Stack.Screen name={'ThemeSelect'} component={ThemeSelect} />
                 <Stack.Screen name={'TagSelect'} component={TagSelect} />
                 <Stack.Screen name={'Select'} component={Select} />
-                <Stack.Screen name={'KeypadLock'} component={KeypadLock} />
               </Stack.Navigator>
             </NavigationContainer>
           </PasswordModalProvider>

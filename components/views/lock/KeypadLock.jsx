@@ -9,6 +9,7 @@ import {useRecoilValue} from 'recoil';
 import {viewListState} from '../../../atoms';
 
 const KeypadLock = props => {
+  // TODO checkAnswer
   const answer = props.answer;
   const navigation = useNavigation();
   const viewList = useRecoilValue(viewListState);
@@ -27,8 +28,6 @@ const KeypadLock = props => {
   };
 
   const onSubmit = () => {
-    console.log(input);
-
     if (input === answer.toString()) {
       const viewListByTagId = viewList
         .filter(view => view.tagId === props.targetTagId)
@@ -46,24 +45,24 @@ const KeypadLock = props => {
         <Text style={styles.input}>{input}</Text>
       </View>
       <View style={styles.row}>
-        <NumberButton number={1} action={() => onNumberPress(1)} />
-        <NumberButton number={2} action={() => onNumberPress(2)} />
-        <NumberButton number={3} action={() => onNumberPress(3)} />
+        <NumberButton number={1} onPress={() => onNumberPress(1)} />
+        <NumberButton number={2} onPress={() => onNumberPress(2)} />
+        <NumberButton number={3} onPress={() => onNumberPress(3)} />
       </View>
       <View style={styles.row}>
-        <NumberButton number={4} action={() => onNumberPress(4)} />
-        <NumberButton number={5} action={() => onNumberPress(5)} />
-        <NumberButton number={6} action={() => onNumberPress(6)} />
+        <NumberButton number={4} onPress={() => onNumberPress(4)} />
+        <NumberButton number={5} onPress={() => onNumberPress(5)} />
+        <NumberButton number={6} onPress={() => onNumberPress(6)} />
       </View>
       <View style={styles.row}>
-        <NumberButton number={7} action={() => onNumberPress(7)} />
-        <NumberButton number={8} action={() => onNumberPress(8)} />
-        <NumberButton number={9} action={() => onNumberPress(9)} />
+        <NumberButton number={7} onPress={() => onNumberPress(7)} />
+        <NumberButton number={8} onPress={() => onNumberPress(8)} />
+        <NumberButton number={9} onPress={() => onNumberPress(9)} />
       </View>
       <View style={styles.row}>
-        <NumberButton number={0} action={() => onNumberPress(0)} />
-        <ActionButton text={'취소'} action={() => onCancel()} />
-        <ActionButton text={'입력'} action={() => onSubmit()} />
+        <NumberButton number={0} onPress={() => onNumberPress(0)} />
+        <ActionButton text={'취소'} onPress={() => onCancel()} />
+        <ActionButton text={'입력'} onPress={() => onSubmit()} />
       </View>
     </View>
   );
