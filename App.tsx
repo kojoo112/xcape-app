@@ -14,8 +14,6 @@ import {TagModalProvider} from './context/TagModalContext';
 import {PasswordModalProvider} from './context/PasswordModalContext';
 import Select from './components/Select';
 import {InitialLoadingProvider} from './context/InitialLoadingContext';
-import ButtonPadlock from './components/views/lock/ButtonPadlock';
-import KeypadLock from './components/views/lock/KeypadLock';
 
 const Stack = createNativeStackNavigator();
 
