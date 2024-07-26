@@ -45,7 +45,9 @@ const AlphabetScrollPicker = React.memo(({answerChar, setInput, index}) => {
 
     setInput(prev => [
       ...prev.map((input, arrayIndex) =>
-        arrayIndex === index ? alphabetArray[correctOffset / 100] : input,
+        arrayIndex === index
+          ? alphabetArray[correctOffset / BUTTON_HEIGHT]
+          : input,
       ),
     ]);
   };
