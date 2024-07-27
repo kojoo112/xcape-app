@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useRecoilValue} from 'recoil';
 import {viewListState} from '../../atoms';
 import {Colors} from '../../Colors';
+import HorizontalButton from '../buttons/HorizontalButton';
 
 const AnswerView = props => {
   const viewList = useRecoilValue(viewListState);
@@ -21,7 +22,7 @@ const AnswerView = props => {
   const answer = props.answer.toUpperCase();
 
   const checkAnswer = () => {
-    if (answer === password.toUpperCase()) {
+    if ('answer' === password.toUpperCase()) {
       const viewListByTagId = viewList
         .filter(view => view.tagId === props.targetTagId)
         .sort((a, b) => a.orders - b.orders);
@@ -37,22 +38,29 @@ const AnswerView = props => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        placeholder={placeholder}
-        placeholderTextColor={Colors.white}
-        maxLength={props.answer.length}
-        autoCapitalize="characters"
-        multiline={true}
-        numberOfLines={1}
-        blurOnSubmit={true}
-        returnKeyType="search"
-        ref={passwordRef}
-      />
-      <TouchableOpacity style={styles.button} onPress={checkAnswer}>
-        <Text style={styles.buttonText}>입 력</Text>
-      </TouchableOpacity>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setPassword}
+          placeholderTextColor={Colors.white}
+          maxLength={props.answer.length}
+          placeholder={placeholder}
+          autoCapitalize={'characters'}
+          multiline={true}
+          numberOfLines={1}
+          blurOnSubmit={true}
+          returnKeyType={'search'}
+          ref={passwordRef}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <HorizontalButton
+          text={'취소'}
+          onPress={() => passwordRef.current.clear()}
+          size={'small'}
+        />
+        <HorizontalButton text={'제출'} onPress={checkAnswer} size={'small'} />
+      </View>
     </View>
   );
 };
@@ -61,21 +69,30 @@ export default AnswerView;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
-    height: 80,
+    alignItems: 'center',
+    backgroundColor: Colors.black,
+    paddingVertical: 10,
+  },
+  inputContainer: {
+    width: '60%',
+    paddingHorizontal: 4,
   },
   input: {
-    width: '70%',
-    backgroundColor: Colors.logo,
-    color: Colors.white,
+    backgroundColor: Colors.white,
+    color: Colors.black,
     fontSize: 30,
     padding: 10,
     textAlign: 'center',
     letterSpacing: 10,
+    borderRadius: 5,
+  },
+  buttonContainer: {
+    width: '40%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   button: {
-    width: '30%',
     backgroundColor: Colors.black,
     justifyContent: 'center',
   },

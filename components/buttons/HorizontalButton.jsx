@@ -5,10 +5,18 @@ import {Colors} from '../../Colors';
 import Gradient from '../Gradient';
 import GradientText from '../GradientText';
 
-const HorizontalButton = ({text, onPress}) => {
+const HorizontalButton = ({text, onPress, size = 'large'}) => {
   return (
-    <Gradient colors={Colors.neonSlash} style={{padding: 2, borderRadius: 15}}>
-      <TouchableOpacity style={styles.container} onPress={() => onPress()}>
+    <Gradient
+      colors={Colors.neonSlash}
+      style={{padding: 2, borderRadius: size === 'large' ? 15 : 10}}>
+      <TouchableOpacity
+        style={{
+          ...styles.container,
+          paddingHorizontal: size === 'large' ? 48 : 16,
+          borderRadius: size === 'large' ? 13 : 8,
+        }}
+        onPress={() => onPress()}>
         <GradientText
           colors={Colors.neonSlash}
           textStyle={styles.text}
@@ -23,9 +31,7 @@ export default HorizontalButton;
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 13,
-    paddingVertical: 16,
-    paddingHorizontal: 48,
+    paddingVertical: 12,
     backgroundColor: Colors.black,
   },
   text: {
