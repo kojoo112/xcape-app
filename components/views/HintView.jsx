@@ -20,14 +20,14 @@ const HintView = ({message1, message2}) => {
           <View style={styles.messageContainer}>
             <PretendardText style={styles.message}>{message1}</PretendardText>
           </View>
-          <View style={styles.border}></View>
+          <View style={styles.border} />
           {!messageVisible ? (
             <Pressable
               onPress={() => setMessageVisible(true)}
               style={styles.messageContainer}>
               <Image
                 source={require('../../assets/images/locker.png')}
-                style={{marginVertical: 8}}
+                style={{marginBottom: 16}}
               />
               <PretendardText
                 style={{...styles.message, color: Colors.neonYellow}}>
