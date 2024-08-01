@@ -5,7 +5,7 @@ import {Colors} from '../../Colors';
 import Gradient from '../Gradient';
 import GradientText from '../GradientText';
 
-const HorizontalButton = ({text, onPress, size = 'large'}) => {
+const GradientTextButton = ({text, onPress, size = 'large'}) => {
   return (
     <Gradient
       colors={Colors.neonSlash}
@@ -27,7 +27,7 @@ const HorizontalButton = ({text, onPress, size = 'large'}) => {
   );
 };
 
-export default HorizontalButton;
+export default GradientTextButton;
 
 const styles = StyleSheet.create({
   container: {

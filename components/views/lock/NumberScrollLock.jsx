@@ -1,12 +1,18 @@
 import React, {useState} from 'react';
 
-import {StyleSheet, View} from 'react-native';
-import HorizontalButton from '../../buttons/HorizontalButton';
+import {StyleSheet, ToastAndroid, View} from 'react-native';
+import GradientTextButton from '../../buttons/GradientTextButton';
 import {Colors} from '../../../Colors';
 import NumberScrollPicker from '../../NumberScrollPicker';
+import ConfirmButton from '../../buttons/ConfirmButton';
+import {useNavigation} from '@react-navigation/native';
+import {useRecoilValue} from 'recoil';
+import {viewListState} from '../../../atoms';
 
-const NumberScrollLock = () => {
-  const answer = '587'.split('');
+const NumberScrollLock = props => {
+  const answer = props.answer.split('');
+  const navigation = useNavigation();
+  const viewList = useRecoilValue(viewListState);
 
   const [input, setInput] = useState([]);
 
@@ -19,14 +25,14 @@ const NumberScrollLock = () => {
       }
     }
 
-    console.log(answer);
-    console.log(input);
-    console.log(flag);
-    // TODO checkAnswer
     if (flag) {
-      // 정답일 경우
+      const viewListByTagId = viewList
+        .filter(view => view.tagId === props.targetTagId)
+        .sort((a, b) => a.orders - b.orders);
+      navigation.push('TagView', {viewList: viewListByTagId});
     } else {
-      // 오답일 경우
+      ToastAndroid.show('잘못된 입력입니다.', ToastAndroid.SHORT);
+      setInput([]);
     }
   };
 
@@ -50,12 +56,7 @@ const NumberScrollLock = () => {
         />
       </View>
       <View style={{alignItems: 'center'}}>
-        <HorizontalButton
-          text={'입력'}
-          onPress={() => {
-            checkAnswer();
-          }}
-        />
+        <ConfirmButton onPress={() => checkAnswer()} />
       </View>
     </View>
   );

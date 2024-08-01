@@ -1,59 +1,46 @@
 import React, {useState} from 'react';
 
-import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import {Colors} from '../../Colors';
-import Gradient from '../Gradient';
-
-const neonSlash = [Colors.neonYellow, Colors.neonGreen];
+import PretendardText from '../PretendardText';
 
 const HintView = ({message1, message2}) => {
+  const [active, setActive] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Gradient colors={neonSlash} style={styles.headerBorder}>
-          <View style={styles.textContainer}>
-            <Text style={styles.hintText}>HINT</Text>
+      <Pressable style={styles.question} onPress={() => setActive(true)}>
+        <PretendardText style={styles.questionMark}>?</PretendardText>
+      </Pressable>
+      {!active ? (
+        <PretendardText style={styles.hintText}>HINT</PretendardText>
+      ) : (
+        <View>
+          <View style={styles.messageContainer}>
+            <PretendardText style={styles.message}>{message1}</PretendardText>
           </View>
-        </Gradient>
-      </View>
-      <Gradient
-        colors={neonSlash}
-        style={{
-          ...styles.gradientStyle,
-          paddingBottom: 0,
-          marginVertical: 16,
-        }}>
-        <View style={styles.subMessageContainer}>
-          <Text style={styles.hintMessage}>{message1}</Text>
-        </View>
-      </Gradient>
-      <Gradient
-        colors={neonSlash}
-        style={{...styles.gradientStyle, marginBottom: 4}}>
-        <View style={styles.subMessageContainer}>
+          <View style={styles.border}></View>
           {!messageVisible ? (
             <Pressable
               onPress={() => setMessageVisible(true)}
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+              style={styles.messageContainer}>
               <Image
                 source={require('../../assets/images/locker.png')}
                 style={{marginVertical: 8}}
               />
-              <Text style={{...styles.hintMessage, color: Colors.neonYellow}}>
+              <PretendardText
+                style={{...styles.message, color: Colors.neonYellow}}>
                 터치하면 정답이 보입니다.
-              </Text>
+              </PretendardText>
             </Pressable>
           ) : (
-            <Text style={styles.hintMessage}>{message2}</Text>
+            <View style={styles.messageContainer}>
+              <PretendardText style={styles.message}>{message2}</PretendardText>
+            </View>
           )}
         </View>
-      </Gradient>
+      )}
     </View>
   );
 };
@@ -62,40 +49,44 @@ export default HintView;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    backgroundColor: Colors.black,
-  },
-  header: {
-    paddingHorizontal: 42,
-  },
-  headerBorder: {
-    padding: 2,
-    borderRadius: 100,
-  },
-  textContainer: {
-    backgroundColor: Colors.black,
-    width: '100%',
-    borderRadius: 100,
+    padding: 20,
     alignItems: 'center',
-    paddingVertical: 16,
+  },
+  question: {
+    width: 60,
+    height: 60,
+    borderRadius: 100,
+    backgroundColor: Colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  questionMark: {
+    fontSize: 48,
+    fontWeight: '700',
+    color: Colors.black,
   },
   hintText: {
-    color: '#FFF100',
-    fontSize: 36,
-    fontWeight: '700',
+    color: Colors.primary,
+    letterSpacing: 10,
+    fontSize: 32,
   },
-  gradientStyle: {
-    padding: 2,
-  },
-  subMessageContainer: {
+  messageContainer: {
+    width: 320,
+    height: 180,
     backgroundColor: Colors.black,
-    height: 200,
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    alignItems: 'center',
   },
-  hintMessage: {
-    fontSize: 24,
+  message: {
+    fontSize: 20,
+    fontWeight: '700',
     color: Colors.white,
+  },
+  border: {
+    borderWidth: 1,
+    marginVertical: 1,
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
   },
 });

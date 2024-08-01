@@ -57,28 +57,39 @@ const AlphabetScrollPicker = React.memo(({answerChar, setInput, index}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Gradient colors={Colors.neonSlash} style={{padding: 2}}>
-        <ScrollView
-          ref={scrollRef}
-          showsVerticalScrollIndicator={false}
-          onScrollEndDrag={handleMinuteOnScroll}
-          scrollEventThrottle={0}
-          decelerationRate={'fast'}
-          style={{
-            height: BUTTON_HEIGHT,
-          }}>
-          {alphabetArray.map(alphabet => (
-            <View key={Math.random()} style={styles.itemContainerStyle}>
-              <GradientText
-                colors={Colors.neonSlash}
-                textStyle={styles.textStyle}
-                text={alphabet}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </Gradient>
+    <View>
+      <View>
+        <Gradient colors={Colors.neonSlash} style={{padding: 2}}>
+          <ScrollView
+            ref={scrollRef}
+            showsVerticalScrollIndicator={false}
+            onScrollEndDrag={handleMinuteOnScroll}
+            scrollEventThrottle={0}
+            decelerationRate={'fast'}
+            nestedScrollEnabled={true}
+            style={{
+              height: BUTTON_HEIGHT,
+            }}>
+            {alphabetArray.map(alphabet => (
+              <Gradient
+                colors={['#606060', '#000', '#000', '#606060']}
+                start={{x: 0, y: 0}}
+                end={{x: 0, y: 1}}
+                style={{height: BUTTON_HEIGHT}}
+                key={Math.random()}
+                locations={[0.1, 0.3, 0.8, 1]}>
+                <View style={styles.itemContainerStyle}>
+                  <GradientText
+                    colors={Colors.neonSlash}
+                    textStyle={styles.textStyle}
+                    text={alphabet}
+                  />
+                </View>
+              </Gradient>
+            ))}
+          </ScrollView>
+        </Gradient>
+      </View>
     </View>
   );
 });
@@ -86,15 +97,11 @@ const AlphabetScrollPicker = React.memo(({answerChar, setInput, index}) => {
 export default AlphabetScrollPicker;
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-  },
   itemContainerStyle: {
-    height: BUTTON_HEIGHT,
-    backgroundColor: Colors.black,
+    marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: 14,
   },
   textStyle: {
     fontSize: 50,

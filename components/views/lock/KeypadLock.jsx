@@ -9,7 +9,6 @@ import {useRecoilValue} from 'recoil';
 import {viewListState} from '../../../atoms';
 
 const KeypadLock = props => {
-  // TODO checkAnswer
   const answer = props.answer;
   const navigation = useNavigation();
   const viewList = useRecoilValue(viewListState);
@@ -27,7 +26,7 @@ const KeypadLock = props => {
     setInput('');
   };
 
-  const onSubmit = () => {
+  const checkAnswer = () => {
     if (input === answer.toString()) {
       const viewListByTagId = viewList
         .filter(view => view.tagId === props.targetTagId)
@@ -62,7 +61,7 @@ const KeypadLock = props => {
       <View style={styles.row}>
         <NumberButton number={0} onPress={() => onNumberPress(0)} />
         <ActionButton text={'취소'} onPress={() => onCancel()} />
-        <ActionButton text={'입력'} onPress={() => onSubmit()} />
+        <ActionButton text={'입력'} onPress={() => checkAnswer()} />
       </View>
     </View>
   );
