@@ -1,17 +1,39 @@
 import React, {useState} from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, ToastAndroid, View} from 'react-native';
 import {Colors} from '../../../Colors';
 import ToggleButton from '../../buttons/ToggleButton';
-import HorizontalButton from '../../buttons/HorizontalButton';
 import PretendardText from '../../PretendardText';
+import {useNavigation} from '@react-navigation/native';
+import {useRecoilValue} from 'recoil';
+import {viewListState} from '../../../atoms';
+import ConfirmButton from '../../buttons/ConfirmButton';
+import CancelButton from '../../buttons/CancelButton';
 
 const ButtonPadlock = props => {
-  // TODO checkAnswer
-  // const answerArr = props.answer.split('');
+  const answer = props.answer.split('').map(number => parseInt(number, 10));
+  const navigation = useNavigation();
+  const viewList = useRecoilValue(viewListState);
+
   const [input, setInput] = useState([]);
 
-  const checkAnswer = () => {};
+  const checkAnswer = () => {
+    if (answer.length === input.length) {
+      const isAnswer = input.every(item => answer.includes(item));
+      if (isAnswer) {
+        const viewListByTagId = viewList
+          .filter(view => view.tagId === props.targetTagId)
+          .sort((a, b) => a.orders - b.orders);
+        navigation.push('TagView', {viewList: viewListByTagId});
+      } else {
+        ToastAndroid.show('잘못된 입력입니다.', ToastAndroid.SHORT);
+        setInput([]);
+      }
+    } else {
+      ToastAndroid.show('잘못된 입력입니다.', ToastAndroid.SHORT);
+      setInput([]);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -40,8 +62,8 @@ const ButtonPadlock = props => {
         <PretendardText style={styles.text}>8</PretendardText>
       </View>
       <View style={{...styles.row, marginVertical: 12}}>
-        <HorizontalButton text={'취소'} onPress={() => setInput([])} />
-        <HorizontalButton text={'입력'} onPress={() => checkAnswer()} />
+        <CancelButton onPress={() => setInput([])} />
+        <ConfirmButton onPress={() => checkAnswer()} />
       </View>
     </View>
   );

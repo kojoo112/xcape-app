@@ -6,7 +6,7 @@ import GradientText from './GradientText';
 
 const BUTTON_HEIGHT = 120;
 
-const NumberScrollPicker = React.memo(({answerChar, setInput, index}) => {
+const NumberScrollPicker = React.memo(({setInput, index}) => {
   const numberArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   const scrollRef = useRef(null);
@@ -19,7 +19,7 @@ const NumberScrollPicker = React.memo(({answerChar, setInput, index}) => {
   const handleMinuteOnScroll = e => {
     const correctOffset = getCenterPosition(e.nativeEvent.contentOffset.y);
     scrollRef.current.scrollTo({y: correctOffset});
-    console.log(correctOffset);
+
     setInput(prev => [
       ...prev.map((input, arrayIndex) =>
         arrayIndex === index
@@ -40,6 +40,7 @@ const NumberScrollPicker = React.memo(({answerChar, setInput, index}) => {
         showsVerticalScrollIndicator={false}
         onScrollEndDrag={handleMinuteOnScroll}
         scrollEventThrottle={0}
+        nestedScrollEnabled={true}
         decelerationRate={'fast'}
         style={{
           height: BUTTON_HEIGHT,

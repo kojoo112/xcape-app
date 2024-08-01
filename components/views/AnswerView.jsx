@@ -1,17 +1,10 @@
-import {
-  Text,
-  StyleSheet,
-  TextInput,
-  View,
-  TouchableOpacity,
-  ToastAndroid,
-} from 'react-native';
+import {StyleSheet, TextInput, View, ToastAndroid} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useRecoilValue} from 'recoil';
 import {viewListState} from '../../atoms';
 import {Colors} from '../../Colors';
-import HorizontalButton from '../buttons/HorizontalButton';
+import ConfirmButton from '../buttons/ConfirmButton';
 
 const AnswerView = props => {
   const viewList = useRecoilValue(viewListState);
@@ -22,7 +15,7 @@ const AnswerView = props => {
   const answer = props.answer.toUpperCase();
 
   const checkAnswer = () => {
-    if ('answer' === password.toUpperCase()) {
+    if (answer === password.toUpperCase()) {
       const viewListByTagId = viewList
         .filter(view => view.tagId === props.targetTagId)
         .sort((a, b) => a.orders - b.orders);
@@ -53,14 +46,7 @@ const AnswerView = props => {
           ref={passwordRef}
         />
       </View>
-      <View style={styles.buttonContainer}>
-        <HorizontalButton
-          text={'취소'}
-          onPress={() => passwordRef.current.clear()}
-          size={'small'}
-        />
-        <HorizontalButton text={'제출'} onPress={checkAnswer} size={'small'} />
-      </View>
+      <ConfirmButton onPress={() => checkAnswer()} />
     </View>
   );
 };
@@ -72,7 +58,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.black,
-    paddingVertical: 10,
+    padding: 10,
+    justifyContent: 'space-evenly',
   },
   inputContainer: {
     width: '60%',
@@ -82,15 +69,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     color: Colors.black,
     fontSize: 30,
-    padding: 10,
+    padding: 14,
     textAlign: 'center',
     letterSpacing: 10,
-    borderRadius: 5,
-  },
-  buttonContainer: {
-    width: '40%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    borderRadius: 3,
   },
   button: {
     backgroundColor: Colors.black,

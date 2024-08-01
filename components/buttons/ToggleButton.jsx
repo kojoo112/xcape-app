@@ -28,7 +28,7 @@ const ToggleButton = ({value, input, setInput}) => {
       <Pressable
         style={{
           ...styles.button,
-          backgroundColor: active ? Colors.logo : Colors.darker,
+          backgroundColor: active ? Colors.primary : Colors.darker,
         }}
         onPress={onPress}></Pressable>
     </Gradient>
