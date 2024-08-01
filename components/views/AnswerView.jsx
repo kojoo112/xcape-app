@@ -35,7 +35,7 @@ const AnswerView = props => {
         <TextInput
           style={styles.input}
           onChangeText={setPassword}
-          placeholderTextColor={Colors.white}
+          placeholderTextColor={Colors.black}
           maxLength={props.answer.length}
           placeholder={placeholder}
           autoCapitalize={'characters'}
