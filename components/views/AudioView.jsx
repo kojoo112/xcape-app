@@ -1,13 +1,7 @@
-import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, Image, Pressable, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Sound from 'react-native-sound';
+import {Colors} from '../../Colors';
 
 const windowWidth = Dimensions.get('window').width;
 const tapeImage = require('../../assets/images/tape_template/tape-image1.png');
@@ -41,7 +35,7 @@ const AudioView = props => {
 
   return (
     <View style={styles.backgroundImage}>
-      <View style={{backgroundColor: 'black'}}>
+      <View style={{backgroundColor: Colors.black}}>
         {audioFlag ? (
           <Image source={tapeImage} style={styles.tape} resizeMode={'cover'} />
         ) : (
@@ -52,11 +46,11 @@ const AudioView = props => {
           />
         )}
       </View>
-      <View style={{backgroundColor: 'red', height: 100}}>
-        <ImageBackground
-          source={require('../../assets/images/tape_template/controller.png')}
+      <View style={{backgroundColor: Colors.black}}>
+        <Image
+          source={require('../../assets/images/tape_template/play-button.png')}
           style={styles.tapeController}
-          resizeMode={'cover'}
+          resizeMode={'center'}
         />
         <Pressable
           onPress={() => {
@@ -65,10 +59,10 @@ const AudioView = props => {
           hitSlop={20}
           style={{
             position: 'absolute',
-            top: 34,
-            left: 240,
-            width: 70,
-            height: 60,
+            top: 70,
+            left: 120,
+            width: 90,
+            height: 100,
           }}></Pressable>
       </View>
     </View>
@@ -84,8 +78,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
   tapeController: {
-    width: null,
-    height: 100,
+    width: '100%',
+    height: 173,
   },
 });
 
