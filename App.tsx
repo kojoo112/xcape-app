@@ -1,4 +1,6 @@
-import React from 'react';
+import SplashScreen from 'react-native-splash-screen';
+
+import React, {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -19,6 +21,12 @@ import TagPreview from './screens/TagPreview';
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
+  });
+
   return (
     <RecoilRoot>
       <InitialLoadingProvider>
